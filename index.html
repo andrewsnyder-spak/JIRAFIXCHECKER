@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script type="text/javascript" src="app.js"></script>
+		<link rel="stylesheet" href="app.css" type="text/css" />
+
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script type="text/javascript" src="app.js"></script>
+		<link rel="stylesheet" href="app.css" type="text/css" />
+
+
+
+</HEAD>
+<BODY>
+<h1>Fix Type Checker</h1>
+<br>
+Click <b>Start Here</b> and enter the Fix Number found at the top of your JIRA
+
+<br>
+<br>
+
+<button onclick="getFixType()">Start Here</button>
+<br>
+<br>
+NOTE: Please email or ping Andrew Snyder-Spak (Andrew.Snyder.Spak@Veeva.com) if you come cross any bugs.
+<br>
+<br>
+v0.2
+<script>
+
+        function getFixType() {
+
+
+           var fixNumber = prompt("Please enter the Fix Version listed at the top of the JIRA (examples: 21r3.0 or 22R1.3.X)");
+            var isThereX = 0;
+            
+            var xTest = fixNumber.split('x');
+            var xTest2 = fixNumber.split('X');
+            
+            //TEST FOR LOWER X
+            if(xTest.length < 2){
+              //There is no X in the Fix Number
+            }else{
+                isThereX = 1;
+            }
+            
+            ///TEST FOR CAP X
+            if(xTest2.length < 2){
+                //There is no X in the Fix Number
+            }else{
+                isThereX = 1;
+            }
+            
+           
+            //Check for lowercase r
+            var partsArray = fixNumber.split('r');
+            
+          //Check for Capitol R
+            if(partsArray.length < 2){
+                partsArray = fixNumber.split('R');
+            }
+            
+            //If neither r or R are present, invalid fix number
+            if(partsArray.length < 2){
+                alert("Invalid Fix Number!");
+            }
+            
+
+
+                   if(partsArray[1].length > 3){
+                       //if there are more than 3 characters after the R this is a maintenence release
+
+                       var testArray = partsArray[1].split('.');
+
+                       var zeroFound;
+                       var i;
+
+
+                       if(testArray.includes('0')){
+                        //If there's a 0 after the R, then it is sometype of General Release 
+                           zeroFound = 1;
+
+                       }
+
+
+                       if(zeroFound == 1){
+                           //if a fix number contains 0 after the 'r' then it is a General Release fix
+                           if(isThereX == 0){
+                               //if an X is not present, then this is a finalized release number.
+                               alert("This is a General Release(Slow Train) Maintenence Release");
+                           } else {
+                               //if an X is present, then this is not a finalized release number
+                               alert("This is a planned General Release(Slow Train) Maintenence Release, but this fix number has not yet been finalized.");
+                           }
+                           
+                       }else{
+                           if(isThereX == 0){
+                               //if an X is not present, then this is a finalized release number.
+                               alert("This is a Limited Release(Fast Train) Maintenence Release");
+                           }else{
+                               //if an X is present, then this is not a finalized release number
+                               alert("This is a planned Limited Release(Fast Train) Maintenence Release, but this fix number has not yet been finalized.");
+                           }
+                       }
+
+                   }else{
+                       //if 3 or less characters after the 'r' this is not a maintenece release
+                       var testArray = partsArray[1].split('.');
+                       
+
+                        if(testArray[testArray.length - 1] == 0){
+                            if(isThereX == 0){
+                                //if an X is not present, then this is a finalized release number.
+                                alert("This is a General Release(Slow Train) regular fix");
+                            } else {
+                                //if an X is present, then this is not a finalized release number
+                                alert("This is a planned General Release(Slow Train) regular fix, but this fix number has not yet been finalized.");
+                            }
+                            
+                        } else {
+                            if(isThereX == 0){
+                                //if an X is not present, then this is a finalized release number.
+                                alert("This is a Limited Release(Fast Train) regular fix");
+                            } else {
+                                //if an X is present, then this is not a finalized release number
+                                alert("This is a planned Limited Release(Fast Train) regular fix, but this fix number has not yet been finalized.");
+                            }
+                        }
+                   }
+
+
+        }
+
+        </script>
+</BODY>
+</HTML>
